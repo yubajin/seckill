@@ -1,16 +1,16 @@
 package cn.yubajin.seckill.service.impl;
 
 import cn.yubajin.seckill.Exception.GlobalException;
-import cn.yubajin.seckill.vo.RespBean;
-import cn.yubajin.seckill.vo.RespBeanEnum;
 import cn.yubajin.seckill.mapper.UserMapper;
-import cn.yubajin.seckill.vo.LoginVo;
 import cn.yubajin.seckill.pojo.User;
 import cn.yubajin.seckill.service.IUserService;
 import cn.yubajin.seckill.utils.CookieUtil;
 import cn.yubajin.seckill.utils.JsonUtil;
 import cn.yubajin.seckill.utils.SecurityUtils;
 import cn.yubajin.seckill.utils.UUIDutil;
+import cn.yubajin.seckill.vo.LoginVo;
+import cn.yubajin.seckill.vo.RespBean;
+import cn.yubajin.seckill.vo.RespBeanEnum;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String ticket = UUIDutil.uuid();
         redisTemplate.opsForValue().set("skuser:" + ticket, JsonUtil.object2JsonStr(user));
         CookieUtil.setCookie(request, response, "userTicket", ticket);
-        return RespBean.success();
+        return RespBean.success(ticket);
     }
 
     /**
