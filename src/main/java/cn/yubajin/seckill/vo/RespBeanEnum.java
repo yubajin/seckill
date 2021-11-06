@@ -23,8 +23,14 @@ public enum RespBeanEnum {
     MOBILE_ERROR(500212,"手机号码格式错误"),
     BIND_ERROR(500213, "提示消息绑定错误"),
     //秒杀模块5005xx
-    EMPTY_STOCK(500510, "商品库存不存"),
-    REAP_ORDER(500511, "该商品每人限购一件");
+    EMPTY_STOCK(500510, "商品库存不足"),
+    REAP_ORDER(500511, "该商品每人限购一件"),
+    //用户模块5006xx
+    USER_ERROR(500610, "用户不存在"),
+    UPDATE_PASSWORD_ERROR(500611, "密码更新失败"),
+    //订单模块
+    ORDER_NOT_EXIST(500710, "订单不存在");
+
     private final Integer code;
     private final String message;
 }

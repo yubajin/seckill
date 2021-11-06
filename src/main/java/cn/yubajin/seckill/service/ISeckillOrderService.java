@@ -1,6 +1,7 @@
 package cn.yubajin.seckill.service;
 
 import cn.yubajin.seckill.pojo.SeckillOrder;
+import cn.yubajin.seckill.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISeckillOrderService extends IService<SeckillOrder> {
 
+    /**
+     * 获取秒杀结果
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    Long getResult(User user, Long goodsId);
 }

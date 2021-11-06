@@ -36,6 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private RedisTemplate redisTemplate;
+
     /**
      * 登录
      * @param loginVo
@@ -92,6 +93,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             CookieUtil.setCookie(request,response,"userTicket",userTicket);
         }
         return user;
+    }
+
+    /***
+     * 更新密码
+     * @param userTicket
+     * @param password
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public RespBean updatePassWord(String userTicket, String password, HttpServletRequest request, HttpServletResponse response) {
+        User user = this.getByUserTicket(userTicket, request, response);
+        if (user == null){
+            throw new GlobalException(RespBeanEnum.EMPTY_STOCK);
+        }
+        user.setPassword(SecurityUtils.formPassToDBPass(password, user.getSalt()));
+        int res = userMapper.updateById(user);
+        if (res == 1){
+            redisTemplate.delete("skuser:" + userTicket);
+            return RespBean.success();
+        }
+
+        return RespBean.error(RespBeanEnum.UPDATE_PASSWORD_ERROR);
     }
 }
 
