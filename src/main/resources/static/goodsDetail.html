@@ -40,8 +40,18 @@
                 <span id="seckillTip"></span>
             </td>
             <td>
-                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSeckill()">立即秒杀
+<!--                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSeckill()">立即秒杀-->
                 </button>
+                <div class="row">
+                    <div class="form-inline">
+                        <img id="captchaImg" width="130" height="32" style="display: none"
+                             onclick="refreshCaptcha()"/>
+                        <input id="captcha" class="form-control" style="display: none"/>
+                        <button class="btn btn-primary" type="button" id="buyButton"
+                                onclick="getSeckillPath()">立即秒杀
+                        </button>
+                    </div>
+                </div>
                 <input type="hidden" name="goodsId" id="goodsId"/>
             </td>
         </tr>
@@ -64,6 +74,11 @@
     $(function(){
         getDetails();
     });
+
+    function refreshCaptcha() {
+        $("#captchaImg").attr("src", "/seckill/captcha?goodsId=" +
+            $("#goodsId").val() + "&time=" + new Date())
+    }
 
     function getDetails() {
         var goodsId = g_getQueryString("goodsId");
@@ -121,6 +136,9 @@
                 clearTimeout(timeout);
             }
             $("#seckillTip").html("秒杀进行中");
+            $("#captchaImg").attr("src", "/seckill/captcha?goodsId=" + $("#goodsId").val())
+            $("#captchaImg").show();
+            $("#captcha").show();
         //秒杀已经结束
         } else {
             $("#buyButton").attr("disabled", true);
@@ -136,6 +154,32 @@
         var seconds = parseInt(mss/ 1000 % 60);//转换为秒
         return days + " 天 " + hours + " 时 " + minutes + " 分 "
             + seconds ;
+    }
+
+    function getSeckillPath() {
+        var goodsId = $("#goodsId").val();
+        var captcha = $("#captcha").val();
+        g_showLoading();
+        $.ajax({
+            url: "/seckill/path",
+            type: "GET",
+            data: {
+                goodsId: goodsId,
+                captcha: captcha
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    var path = data.obj;
+                    doSeckill(path);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+            ,
+            error: function () {
+                layer.msg("客户端请求错误");
+            }
+        })
     }
 
     function doSeckill() {

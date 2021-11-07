@@ -25,6 +25,9 @@ public enum RespBeanEnum {
     //秒杀模块5005xx
     EMPTY_STOCK(500510, "商品库存不足"),
     REAP_ORDER(500511, "该商品每人限购一件"),
+    REQUEST_ILLEGAL(500513, "请求非法"),
+    ACCESS_LIMIT_REACHED(500514, "请求过于频繁"),
+    ERROR_CAPTCHA(500515, "验证码错误"),
     //用户模块5006xx
     USER_ERROR(500610, "用户不存在"),
     UPDATE_PASSWORD_ERROR(500611, "密码更新失败"),
